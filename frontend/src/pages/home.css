@@ -1,0 +1,30 @@
+/* frontend/src/pages/Home.css */
+
+.home-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: linear-gradient(135deg, #4d6fff, #1c1c88);
+  }
+  
+  .home-card {
+    background: white;
+    padding: 2rem;
+    border-radius: 1rem;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+    text-align: center;
+    width: 90%;
+    max-width: 500px;
+  }
+  
+  .home-title {
+    font-size: 2.5rem;
+    color: #333;
+    margin-bottom: 0.5rem;
+  }
+  
+  .home-subtitle {
+    font-size: 1.2rem;
+    color: #666;
+  }
