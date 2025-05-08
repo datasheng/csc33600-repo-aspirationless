@@ -26,7 +26,11 @@ router.post('/register', async (req, res) => {
                 VALUES (?, ?, ?)
             `;
             db.query(insertQuery, [username, email, hashedPassword], (err, result) => {
-                if (err) return res.status(500).json("Error creating user.");
+                
+                if (err) {
+                    console.error("Detailed error:", err.message);
+                    return res.status(500).json("Error creating user.");
+                }
 
                 return res.status(201).json("User has been created successfully!");
             });
