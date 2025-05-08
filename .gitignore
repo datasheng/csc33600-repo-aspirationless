@@ -17,3 +17,4 @@ pnpm-debug.log
 # OS system files (optional but good to have)
 .DS_Store
 Thumbs.db
+backend/.env
