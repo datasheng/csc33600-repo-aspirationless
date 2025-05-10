@@ -107,7 +107,6 @@ function Home() {
               <div className="search-result-details">
                 <h3>{item.product_name}</h3>
                 <p>{item.brand}</p>
-                <p className="price">${item.price || "N/A"}</p>
                 <button>View Product</button>
               </div>
             </div>
