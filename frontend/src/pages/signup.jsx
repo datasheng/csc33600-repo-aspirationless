@@ -3,7 +3,7 @@ import axios from 'axios';
 import "./login-signup.css";
 
 function Signup() {
-    const [username, setUsername] = useState("");
+    const [username, setUserFullname] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
@@ -22,14 +22,14 @@ function Signup() {
             });
             console.log(res.data);
 
-            setSuccess("Account created successfully! Redirecting to login...");
-            setUsername("");
+            setSuccess("Account created successfully!");
+            setUserFullname("");
             setEmail("");
             setPassword("");
 
             // After 2 seconds, redirect to login page
             setTimeout(() => {
-                window.location.href = "/login";
+                window.location.href = "/";
             }, 2000);
 
         } catch (err) {
@@ -51,10 +51,10 @@ function Signup() {
                 <form className="login-form" onSubmit={handleSignup}>
                     <input
                         type="text"
-                        placeholder="Username"
+                        placeholder="Full Name"
                         className="login-input"
                         value={username}
-                        onChange={(e) => setUsername(e.target.value)}
+                        onChange={(e) => setUserFullname(e.target.value)}
                         required
                     />
                     <input

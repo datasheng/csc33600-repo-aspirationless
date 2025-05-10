@@ -21,7 +21,7 @@ function Login() {
             localStorage.setItem("user", JSON.stringify(res.data.user));
 
             // Redirect to home page or dashboard (optional)
-            // window.location.href = "/";
+            window.location.href = "/";
 
         } catch (err) {
             console.error(err);
