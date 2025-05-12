@@ -15,7 +15,7 @@ router.get('/searched', (req, res) => {
     SELECT 
       search_history.search_ID,
       search_history.user_ID,
-      users.user_name,
+      user.user_name,
       search_history.search_date,
       search_history.price_when_search,
       product.product_name,
@@ -26,7 +26,7 @@ router.get('/searched', (req, res) => {
     JOIN store ON store.store_ID = search_history.store_ID
     JOIN users ON users.user_ID = search_history.user_ID
     JOIN product_prices ON product_prices.product_ID = search_history.product_ID
-    WHERE users.user_name = ?
+    WHERE user.user_name = ?
     ORDER BY search_history.search_date DESC;
   `;
 

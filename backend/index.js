@@ -17,9 +17,6 @@ app.use(express.json());
 app.use('/api/users', userRoutes);
 app.use('/api/products', productRoutes);  // Add this line
 app.use('/api/search', searchRoutes);
-
-
-app.use('/api/users', userRoutes);
 app.use('/api/search_history', searchHistoryRoutes);
 
 
