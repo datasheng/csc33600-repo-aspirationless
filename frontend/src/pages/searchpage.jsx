@@ -21,7 +21,7 @@ const SearchPage = () => {
     useEffect(() => {
         const fetchCategories = async () => {
             try {
-                const response = await axios.get('http://localhost:8800/api/products/categories');
+                const response = await axios.get('http://localhost:8800/api/search/categories');
                 setCategories(response.data);
             } catch (err) {
                 console.error("Failed to fetch categories:", err);
@@ -45,7 +45,7 @@ const SearchPage = () => {
                 if (params[key] === '') delete params[key];
             });
 
-            const response = await axios.get('http://localhost:8800/api/products/search', {
+            const response = await axios.get('http://localhost:8800/api/search/search', {
                 params
             });
 
