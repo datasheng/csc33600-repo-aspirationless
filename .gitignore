@@ -49,4 +49,4 @@ npm-debug.log*
 coverage/
 
 backend/.env
-
+/frontend/node_modules/.cache
