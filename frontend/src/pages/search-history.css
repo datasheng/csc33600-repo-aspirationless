@@ -1,0 +1,307 @@
+<<<<<<< HEAD
+/* Login.css */
+
+.all {
+    margin: 1px;
+}
+
+.main-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: linear-gradient(135deg, #304ffe, #1a237e);
+    padding: 0rem;
+}
+
+
+
+
+/* THE MAIN INTERACTIVE SECTION */
+.searchhistory-card {
+    display: grid;
+    grid-template-rows: 140px 500px 100px;
+    background: #fff;
+    padding: 0rem;
+    border-radius: 1rem;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
+    max-width: 1000px;
+    width: 100%;
+    text-align: left;
+    animation: fadeIn 0.6s ease;
+}
+
+/*TOP 
+*/
+.H-searchtop {
+    padding-top: 2rem;
+    padding-left: 2rem;
+    padding-right: 2rem; 
+}
+
+.history-title {
+    margin-top: 0%;
+    margin-bottom: 0.5rem;
+    height: fit-content;
+    font-size: 2.2rem;
+    color: #222;
+}
+/* JUST THE SEARCH BAR AND THE BUTTON*/
+.searchbar-and-button{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    /*
+    display: grid;
+    grid-template-columns: 700px 300px;*/
+}
+/*SEARCH BAR*/ 
+.H-searchbar { 
+    max-width: 900px;
+    width: 100%; 
+    flex-shrink: 4;
+}
+.history-searchbox {
+    padding-right: 5%;
+}
+.item-input {
+    width: 100%;
+    flex-shrink: 3;
+    padding-top: 0.8rem;
+    padding-bottom: 0.8rem;
+    padding-left: 0.8rem;
+    border: 1px solid #ccc;
+    border-radius: 0.5rem;
+    font-size: 1rem;
+    outline: none;
+    transition: border-color 0.3s;
+}
+/*BUTTON*/ 
+.H-searchbutton{
+    width: 100px;
+}
+.searchhistory-button {
+    width: 100px;
+    max-width: 100px;
+    background: #304ffe;
+    color: white;
+    padding: 0.8rem;
+    border: none;
+    border-radius: 0.5rem;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+
+/*ROW 3
+*/ 
+.H-searchbody{
+    display: grid;
+    grid-template-columns: 20% 80%;
+    border: 1px solid #ccc;
+}
+.H-filterbody{
+    border-right: 1px solid #ccc;
+
+}
+.H-itemlog{
+    
+}
+
+
+.history-footer {
+    padding-left: 2rem;
+    margin-top: 1.5rem;
+    font-size: 0.9rem;
+    color: #555;
+}
+
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+
+=======
+/* Login.css */
+
+.all {
+    margin: 1px;
+}
+
+.main-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: linear-gradient(135deg, #304ffe, #1a237e);
+    padding: 0rem;
+    width: 100%;
+}
+
+.main-navbar {
+    position: sticky; 
+    top: 0px;
+    max-width: 2000px;
+    width: 100%;
+    height: 100px;
+    display: grid;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
+}
+.main-navbar ul {
+    background: #fff;
+    list-style-type: none;
+    padding: 0px;
+    margin: 0px;
+    display: grid;
+    grid-template-columns: 20% 20% 20% 20% 20%;
+    
+    
+}
+.main-navbar li {
+    text-align: center;
+    padding: 36px;
+    font-size: larger;
+    font-weight: 500;
+    color: #1a237e;
+}
+.main-navbar li:hover {
+    background: #dee2e2;
+    border: 1px solid #eeeeee;
+    color: #1436ca;
+}
+
+
+/* THE MAIN INTERACTIVE SECTION */
+.searchhistory-card {
+    display: grid;
+    grid-template-rows: 140px 500px 100px;
+    background: #fff;
+    padding: 0rem;
+    border-radius: 1rem;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
+    max-width: 1000px;
+    width: 100%;
+    text-align: left;
+    animation: fadeIn 0.6s ease;
+}
+
+/*TOP 
+*/
+.H-searchtop {
+    padding-top: 2rem;
+    padding-left: 2rem;
+    padding-right: 2rem; 
+}
+
+.history-title {
+    margin-top: 0%;
+    margin-bottom: 0.5rem;
+    height: fit-content;
+    font-size: 2.2rem;
+    color: #222;
+}
+/* JUST THE SEARCH BAR AND THE BUTTON*/
+.searchbar-and-button{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    /*
+    display: grid;
+    grid-template-columns: 700px 300px;*/
+}
+/*SEARCH BAR*/ 
+.history-searchbox {
+    flex-shrink: 4;
+
+    max-width: 900px;
+    width: 100%; 
+    padding-right: 50px;
+}
+.item-input {
+    flex-shrink: 3;
+
+    width: 100%;
+    padding-top: 0.8rem;
+    padding-bottom: 0.8rem;
+    padding-left: 0.8rem;
+    padding-right: 0.8rem;
+
+    transition: border-color 0.3s;
+    border: 1px solid #ccc;
+    border-radius: 0.5rem;
+
+    font-size: 1rem;
+    outline: none;
+}
+/*BUTTON*/ 
+.H-searchbutton{
+    width: 100px;
+}
+.searchhistory-button {
+    float: right;
+    width: 90px;
+    max-width: 90px;
+    background: #304ffe;
+    color: white;
+    padding: 0.8rem;
+    border: none;
+    border-radius: 0.5rem;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+.searchhistory-button:hover {
+    background: #0c1d80;
+}
+
+
+/*ROW 3
+*/ 
+.H-searchbody{
+    display: grid;
+    grid-template-columns: 20% 80%;
+    border: 1px solid #ccc;
+}
+.H-filterbody{
+    border-right: 1px solid #ccc;
+
+}
+.H-itemlog{
+    padding-left: 0%;
+    margin: 0%;
+}
+.H-itemlog ul{
+    padding: 12px;
+    margin: 0%;  
+    box-shadow:
+    inset 0.1em 0.1em .5em rgba(165, 165, 165, 0.3),
+    0 0 0 0px white,
+    0.01em .1em .1em rgba(158, 158, 158, 0.5);
+}
+.H_list{
+    padding: 8px;
+
+    list-style-type: none;
+}
+
+
+
+
+.history-footer {
+    padding-left: 2rem;
+    margin-top: 1.5rem;
+    font-size: 0.9rem;
+    color: #555;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+
+>>>>>>> origin/ethan

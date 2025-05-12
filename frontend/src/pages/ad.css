@@ -1,0 +1,121 @@
+/* Improved ad.css */
+
+.ad-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #ffffff;
+    margin: 20px;
+    padding: 20px 15px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    width: 220px;
+    text-align: center;
+}
+
+.ad-container:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+}
+
+.ad-image {
+    width: 100%;
+    border-radius: 12px;
+    margin-bottom: 15px;
+    transition: transform 0.3s ease;
+}
+
+.ad-image:hover {
+    transform: scale(1.05);
+}
+
+.ad-description {
+    font-size: 1rem;
+    color: #333;
+    margin-bottom: 15px;
+    font-weight: 500;
+}
+
+.ad-button {
+    padding: 10px 20px;
+    background-color: #f97316;
+    color: #ffffff;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.ad-button:hover {
+    background-color: #fb923c;
+    transform: translateY(-3px);
+}
+
+.ads-section {
+    display: flex;
+    overflow-x: auto;
+    gap: 20px;
+    padding-bottom: 15px;
+    scrollbar-width: thin;
+    scrollbar-color: #f97316 #f9f9f9;
+}
+
+.ads-section::-webkit-scrollbar {
+    height: 8px;
+}
+
+.ads-section::-webkit-scrollbar-thumb {
+    background-color: #f97316;
+    border-radius: 8px;
+}
+
+.floating-ad {
+    position: fixed;
+    top: 100px;
+    width: 180px;
+    background-color: #ffffff;
+    border-radius: 15px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+    overflow: hidden;
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.floating-ad.left {
+    left: 20px;
+}
+
+.floating-ad.right {
+    right: 20px;
+}
+
+.floating-ad img {
+    width: 100%;
+    border-radius: 12px;
+    margin-bottom: 15px;
+    transition: transform 0.3s ease;
+}
+
+.floating-ad img:hover {
+    transform: scale(1.05);
+}
+
+.floating-ad button {
+    padding: 10px 20px;
+    background-color: #f97316;
+    color: #ffffff;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.floating-ad button:hover {
+    background-color: #fb923c;
+    transform: translateY(-3px);
+}
