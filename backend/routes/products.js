@@ -10,9 +10,9 @@ router.get('/search', async (req, res) => {
             category,
             minPrice,
             maxPrice,
-            sortBy = 'price', // Default sortBy
+            sortBy = 'price',
             sortOrder = 'ASC',
-            limit = 10 // Default limit
+            limit = 10
         } = req.query;
 
         let sql = `
@@ -52,38 +52,22 @@ router.get('/search', async (req, res) => {
 
         if (minPrice) {
             sql += ` AND pp.price >= ?`;
-            params.push(parseFloat(minPrice)); // Ensure it's a number
+            params.push(parseFloat(minPrice));
         }
 
         if (maxPrice) {
             sql += ` AND pp.price <= ?`;
-            params.push(parseFloat(maxPrice)); // Ditto
+            params.push(parseFloat(maxPrice));
         }
 
-        // Sorting
-        const validSortOptions = {
-            'price': 'pp.price',
-            'last_updated': 'pp.last_updated',
-            'product_name': 'p.product_name',
-            'store_name': 's.store_name' // Added store name sorting
-        };
-
-        const sortColumnSQL = validSortOptions[sortBy] || validSortOptions['price']; // Default to price if invalid
-        
-        const validSortOrders = ['ASC', 'DESC'];
-        const sortDirection = validSortOrders.includes(sortOrder.toUpperCase()) ? sortOrder.toUpperCase() : 'ASC';
-
-        sql += ` ORDER BY ${sortColumnSQL} ${sortDirection}`;
-        sql += ` LIMIT ?`;
-        // Fetch more to allow for multiple store prices per product, adjust multiplier as needed
-        params.push(parseInt(limit, 10) * 5);
-
+        // First, get all matching products with their prices
         db.query(sql, params, (err, results) => {
             if (err) {
                 console.error("Database error:", err);
                 return res.status(500).json({ error: "Database error" });
             }
 
+            // Group products and their prices
             const productsMap = new Map();
             results.forEach(row => {
                 if (!productsMap.has(row.product_ID)) {
@@ -95,7 +79,7 @@ router.get('/search', async (req, res) => {
                         image_url: row.image_url,
                         category_ID: row.category_ID,
                         category_name: row.category_name,
-                        prices: [] // To store prices from different stores
+                        prices: []
                     });
                 }
                 productsMap.get(row.product_ID).prices.push({
@@ -111,57 +95,63 @@ router.get('/search', async (req, res) => {
 
             let finalProducts = Array.from(productsMap.values());
 
-            // If sorting was by a field within the 'prices' array (e.g., store_name for one specific price entry, or price itself)
-            if (sortBy === 'store_name' || sortBy === 'price' || sortBy === 'last_updated') {
-                 finalProducts.forEach(product => {
-                    // Sort individual product prices if necessary
-                    product.prices.sort((a, b) => {
-                        if (sortBy === 'store_name') {
-                            return a.store_name.localeCompare(b.store_name) * (sortDirection === 'ASC' ? 1 : -1);
-                        }
-                        if (sortBy === 'price') {
-                            return (a.price - b.price) * (sortDirection === 'ASC' ? 1 : -1);
-                        }
-                        if (sortBy === 'last_updated') {
-                            return (new Date(b.last_updated) - new Date(a.last_updated)) * (sortDirection === 'ASC' ? 1 : -1); // Inverse for date: more recent first for DESC
-                        }
-                        return 0;
-                    });
+            // For price sorting, we need to consider the lowest price for each product
+            if (sortBy === 'price') {
+                finalProducts.forEach(product => {
+                    // Sort prices for each product from low to high
+                    product.prices.sort((a, b) => a.price - b.price);
                 });
 
-                // Re-sort the `finalProducts` array based on the primary price entry or relevant field
+                // Sort products based on their lowest price
                 finalProducts.sort((a, b) => {
-                    const valA = (a.prices.length > 0) ? (sortBy === 'store_name' ? a.prices[0].store_name : sortBy === 'price' ? a.prices[0].price : new Date(a.prices[0].last_updated)) : null;
-                    const valB = (b.prices.length > 0) ? (sortBy === 'store_name' ? b.prices[0].store_name : sortBy === 'price' ? b.prices[0].price : new Date(b.prices[0].last_updated)) : null;
+                    const lowestPriceA = a.prices[0]?.price || 0;
+                    const lowestPriceB = b.prices[0]?.price || 0;
+                    return sortOrder === 'ASC' 
+                        ? lowestPriceA - lowestPriceB 
+                        : lowestPriceB - lowestPriceA;
+                });
+            } else if (sortBy === 'product_name') {
+                finalProducts.sort((a, b) => {
+                    return sortOrder === 'ASC'
+                        ? a.product_name.localeCompare(b.product_name)
+                        : b.product_name.localeCompare(a.product_name);
+                });
+            } else if (sortBy === 'last_updated') {
+                finalProducts.forEach(product => {
+                    // Sort prices by last_updated (newest first)
+                    product.prices.sort((a, b) => new Date(b.last_updated) - new Date(a.last_updated));
+                });
 
-                    if (valA === null || valB === null) return 0; // Handle products with no prices if any
+                finalProducts.sort((a, b) => {
+                    const newestA = a.prices[0]?.last_updated ? new Date(a.prices[0].last_updated) : 0;
+                    const newestB = b.prices[0]?.last_updated ? new Date(b.prices[0].last_updated) : 0;
+                    return sortOrder === 'ASC'
+                        ? newestA - newestB
+                        : newestB - newestA;
+                });
+            } else if (sortBy === 'store_name') {
+                finalProducts.forEach(product => {
+                    // Sort prices by store name
+                    product.prices.sort((a, b) => a.store_name.localeCompare(b.store_name));
+                });
 
-                    let comparison = 0;
-                    if (typeof valA === 'string') {
-                        comparison = valA.localeCompare(valB);
-                    } else if (valA instanceof Date) {
-                        comparison = valA - valB;
-                         if (sortBy === 'last_updated' && sortDirection === 'DESC') comparison *= -1; // ensure correct date sorting for DESC (most recent first)
-                         else if (sortBy === 'last_updated' && sortDirection === 'ASC') comparison *= 1;
-                    }
-                    else { // numbers (price)
-                        comparison = valA - valB;
-                    }
-                    return comparison * (sortDirection === 'ASC' ? 1 : -1);
+                finalProducts.sort((a, b) => {
+                    const storeA = a.prices[0]?.store_name || '';
+                    const storeB = b.prices[0]?.store_name || '';
+                    return sortOrder === 'ASC'
+                        ? storeA.localeCompare(storeB)
+                        : storeB.localeCompare(storeA);
                 });
             }
 
-
-            // Apply the overall limit *after* grouping and potential re-sorting
+            // Apply limit after all sorting
             const effectiveLimit = parseInt(limit, 10);
             if (finalProducts.length > effectiveLimit) {
                 finalProducts = finalProducts.slice(0, effectiveLimit);
             }
 
-
             res.json(finalProducts);
         });
-
     } catch (error) {
         console.error("Search error:", error);
         res.status(500).json({ error: "Failed to search products" });

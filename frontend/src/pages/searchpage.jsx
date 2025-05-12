@@ -18,7 +18,6 @@ const SearchPage = () => {
     const [error, setError] = useState('');
     const navigate = useNavigate();
 
-    // Fetch categories on component mount
     useEffect(() => {
         const fetchCategories = async () => {
             try {
@@ -42,7 +41,6 @@ const SearchPage = () => {
                 ...filters
             };
 
-            // Remove empty filters
             Object.keys(params).forEach(key => {
                 if (params[key] === '') delete params[key];
             });
@@ -109,50 +107,58 @@ const SearchPage = () => {
                         </div>
 
                         <div className="filter-group">
-                            <label>Price Range:</label>
+                            <label className="price-range-label">Price Range:</label>
                             <div className="price-range">
-                                <input
-                                    type="number"
-                                    name="minPrice"
-                                    placeholder="Min"
-                                    value={filters.minPrice}
-                                    onChange={handleFilterChange}
-                                    className="price-input"
-                                />
-                                <span>to</span>
-                                <input
-                                    type="number"
-                                    name="maxPrice"
-                                    placeholder="Max"
-                                    value={filters.maxPrice}
-                                    onChange={handleFilterChange}
-                                    className="price-input"
-                                />
+                                <div className="price-range-inputs">
+                                    <input
+                                        type="number"
+                                        name="minPrice"
+                                        placeholder="Minimum"
+                                        value={filters.minPrice}
+                                        onChange={handleFilterChange}
+                                        className="price-input"
+                                    />
+                                    <span>to</span>
+                                    <input
+                                        type="number"
+                                        name="maxPrice"
+                                        placeholder="Maximum"
+                                        value={filters.maxPrice}
+                                        onChange={handleFilterChange}
+                                        className="price-input"
+                                    />
+                                </div>
                             </div>
                         </div>
 
                         <div className="filter-group">
-                            <label>Sort By:</label>
-                            <select
-                                name="sortBy"
-                                value={filters.sortBy}
-                                onChange={handleFilterChange}
-                                className="filter-select"
-                            >
-                                <option value="price">Price</option>
-                                <option value="product_name">Name</option>
-                                <option value="last_updated">Recently Updated</option>
-                                <option value="store_name">Store</option>
-                            </select>
-                            <select
-                                name="sortOrder"
-                                value={filters.sortOrder}
-                                onChange={handleFilterChange}
-                                className="filter-select"
-                            >
-                                <option value="ASC">Ascending</option>
-                                <option value="DESC">Descending</option>
-                            </select>
+                            <label>Sort Options:</label>
+                            <div className="sort-container">
+                                <div className="sort-group">
+                                    <select
+                                        name="sortBy"
+                                        value={filters.sortBy}
+                                        onChange={handleFilterChange}
+                                        className="filter-select"
+                                    >
+                                        <option value="price">Price</option>
+                                        <option value="product_name">Name</option>
+                                        <option value="last_updated">Recently Updated</option>
+                                        <option value="store_name">Store</option>
+                                    </select>
+                                </div>
+                                <div className="sort-group">
+                                    <select
+                                        name="sortOrder"
+                                        value={filters.sortOrder}
+                                        onChange={handleFilterChange}
+                                        className="filter-select"
+                                    >
+                                        <option value="ASC">Ascending</option>
+                                        <option value="DESC">Descending</option>
+                                    </select>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </form>

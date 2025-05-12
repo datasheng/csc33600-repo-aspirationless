@@ -55,20 +55,19 @@
 }
 
 .filter-section {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 1rem;
-    margin-top: 1rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+    margin-top: 1.5rem;
 }
 
 .filter-group {
     display: flex;
     flex-direction: column;
-    min-width: 200px;
+    gap: 0.5rem;
 }
 
 .filter-group label {
-    margin-bottom: 0.5rem;
     font-weight: 500;
     color: #555;
 }
@@ -82,15 +81,40 @@
 
 .price-range {
     display: flex;
+    flex-direction: column;
     align-items: center;
     gap: 0.5rem;
 }
 
+.price-range-inputs {
+    display: flex;
+    gap: 0.5rem;
+    width: 100%;
+}
+
 .price-input {
-    width: 80px;
+    flex: 1;
+    min-width: 100px;
     padding: 0.5rem;
     border: 1px solid #ddd;
     border-radius: 4px;
+    text-align: center;
+}
+
+.price-range-label {
+    width: 100%;
+    text-align: center;
+}
+
+.sort-container {
+    display: flex;
+    gap: 1rem;
+}
+
+.sort-group {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
 }
 
 .error-message {
@@ -202,7 +226,12 @@
 
 @media (max-width: 768px) {
     .filter-section {
+        grid-template-columns: 1fr;
+    }
+    
+    .sort-container {
         flex-direction: column;
+        gap: 0.5rem;
     }
     
     .product-grid {
