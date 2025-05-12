@@ -26,4 +26,20 @@ router.get('/search', (req, res) => {
   });
 });
 
+// Fetch ads for free users only
+router.get("/random", (req, res) => {
+    const q = `
+        SELECT * FROM ads 
+        WHERE active = 1
+        ORDER BY RAND()
+        LIMIT 4
+    `;
+    db.query(q, (err, data) => {
+        if (err) return res.status(500).json({ error: "Database error." });
+        res.status(200).json(data);
+    });
+});
+
+
+
 export default router;

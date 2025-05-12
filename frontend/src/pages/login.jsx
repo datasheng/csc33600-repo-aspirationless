@@ -1,6 +1,6 @@
-import { useState } from 'react';
-import axios from 'axios';
-import "./login-signup.css"; // Assuming you have a CSS file for styling
+import { useState } from "react";
+import axios from "axios";
+import "./login-signup.css";
 
 function Login() {
     const [email, setEmail] = useState("");
@@ -12,21 +12,24 @@ function Login() {
         setError("");
 
         try {
-            const res = await axios.post("http://localhost:8800/api/users/login", { email, password });
-            console.log(res.data);
+            const res = await axios.post("http://localhost:8800/api/users/login", {
+                email,
+                password,
+            });
 
-            alert("Login successful!");
+            const { token, user } = res.data;
 
-            // Save user info in localStorage (optional)
-            localStorage.setItem("user", JSON.stringify(res.data.user));
+            // Save the token and user info in localStorage
+            localStorage.setItem("token", token);
+            localStorage.setItem("user", JSON.stringify(user));
 
-            // Redirect to home page or dashboard (optional)
+            // Redirect to home page
             window.location.href = "/";
 
         } catch (err) {
             console.error(err);
             const backendMessage = err.response?.data;
-            if (typeof backendMessage === 'string') {
+            if (typeof backendMessage === "string") {
                 setError(backendMessage);
             } else {
                 setError("Something went wrong. Please try again.");
