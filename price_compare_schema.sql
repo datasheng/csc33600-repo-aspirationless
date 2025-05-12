@@ -7,7 +7,7 @@ CREATE TABLE category (
     category_name VARCHAR(50) NOT NULL
 );
 
--- USER TABLE (fixed for auto increment)
+-- USER TABLE
 CREATE TABLE user (
     user_ID INT PRIMARY KEY AUTO_INCREMENT,
     user_name VARCHAR(50),
