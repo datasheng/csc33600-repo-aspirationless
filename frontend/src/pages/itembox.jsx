@@ -1,12 +1,15 @@
-import React from "react";
-import "./home.css";
+import { Link } from 'react-router-dom';
 
-function ItemBox({ image, title}) {
+function ItemBox({ image, title, price, productId }) {
   return (
     <div className="item-box">
-      <img src={image || "placeholder.jpg"} alt={title} />
+      <img src={image} alt={title} />
       <h3>{title}</h3>
-      <button>View Deals</button>
+      <p>{price}</p>
+
+      <Link to={`/product/${productId}`}>
+        <button>View Deals</button>
+      </Link>
     </div>
   );
 }

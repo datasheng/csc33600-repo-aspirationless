@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import './search.css';
 
 const SearchPage = () => {
@@ -16,7 +16,6 @@ const SearchPage = () => {
     });
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
-    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchCategories = async () => {
@@ -45,10 +44,7 @@ const SearchPage = () => {
                 if (params[key] === '') delete params[key];
             });
 
-            const response = await axios.get('http://localhost:8800/api/search/search', {
-                params
-            });
-
+            const response = await axios.get('http://localhost:8800/api/search/search', { params });
             setProducts(response.data);
         } catch (err) {
             console.error("Search failed:", err);
@@ -60,14 +56,7 @@ const SearchPage = () => {
 
     const handleFilterChange = (e) => {
         const { name, value } = e.target;
-        setFilters(prev => ({
-            ...prev,
-            [name]: value
-        }));
-    };
-
-    const handleProductClick = (productId) => {
-        navigate(`/product/${productId}`);
+        setFilters(prev => ({ ...prev, [name]: value }));
     };
 
     return (
@@ -169,42 +158,46 @@ const SearchPage = () => {
             <div className="results-container">
                 {products.length > 0 ? (
                     <div className="product-grid">
-                        {products.map(product => (
-                            <div 
-                                key={product.product_ID} 
-                                className="product-card"
-                                onClick={() => handleProductClick(product.product_ID)}
-                            >
-                                <div className="product-image-container">
-                                    <img 
-                                        src={product.image_url || 'https://via.placeholder.com/150'} 
-                                        alt={product.product_name} 
-                                        className="product-image"
-                                    />
-                                </div>
-                                <div className="product-info">
-                                    <h3 className="product-name">{product.product_name}</h3>
-                                    <p className="product-brand">{product.brand}</p>
-                                    <p className="product-category">{product.category_name}</p>
-                                    
-                                    <div className="product-prices">
-                                        {product.prices.map(price => (
-                                            <div key={price.price_ID} className="store-price">
-                                                <div className="store-info">
-                                                    <img 
-                                                        src={price.store_logo || 'https://via.placeholder.com/30'} 
-                                                        alt={price.store_name} 
-                                                        className="store-logo"
-                                                    />
-                                                    <span>{price.store_name}</span>
-                                                </div>
-                                                <div className="price-amount">${price.price}</div>
-                                            </div>
-                                        ))}
+                        {products.map(product => {
+                            console.log("Product from search results:", product);
+                            return (
+                                <Link
+                                    key={product.product_ID}
+                                    to={`/product/${product.product_ID}`}
+                                    state={{ product }}
+                                    className="product-card"
+                                >
+                                    <div className="product-image-container">
+                                        <img
+                                            src={product.image_url || 'https://via.placeholder.com/150'}
+                                            alt={product.product_name}
+                                            className="product-image"
+                                        />
                                     </div>
-                                </div>
-                            </div>
-                        ))}
+                                    <div className="product-info">
+                                        <h3 className="product-name">{product.product_name}</h3>
+                                        <p className="product-brand">{product.brand}</p>
+                                        <p className="product-category">{product.category_name}</p>
+
+                                        <div className="product-prices">
+                                            {product.prices.map(price => (
+                                                <div key={price.price_ID} className="store-price">
+                                                    <div className="store-info">
+                                                        <img
+                                                            src={price.store_logo || 'https://via.placeholder.com/30'}
+                                                            alt={price.store_name}
+                                                            className="store-logo"
+                                                        />
+                                                        <span>{price.store_name}</span>
+                                                    </div>
+                                                    <div className="price-amount">${price.price}</div>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+                                </Link>
+                            );
+                        })}
                     </div>
                 ) : (
                     !loading && <div className="no-results">No products found. Try a different search.</div>
