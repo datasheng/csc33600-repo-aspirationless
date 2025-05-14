@@ -15,33 +15,34 @@ function Shpage() {
   const [error, setError] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5;
+  const [user, setUser] = useState(null);
+
+  // Reusable data fetch function with filter
+  const fetchData = async (filter = "desc", user_ID = 1) => {
+    setProducts([]);
+    try {
+      const res = await axios.get(
+        `http://localhost:8800/api/search_history/searched?sort=${filter}`,
+        { headers: { "x-user-id": user_ID } }
+      );
+      setProducts(res.data);
+    } catch (err) {
+      console.error("Failed to fetch products:", err);
+      setError("Unable to fetch data.");
+    }
+  };
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const storedUser = localStorage.getItem("user");
-        if (!storedUser) {
-          setError("User not logged in.");
-          return;
-        }
+    const storedUser = localStorage.getItem("user");
+    if (!storedUser) {
+      setError("User not logged in.");
+      return;
+    }
 
-        const user = JSON.parse(storedUser);
-        const userId = user.user_ID;
+    const parsedUser = JSON.parse(storedUser);
+    setUser(parsedUser);
 
-        const res = await axios.get('http://localhost:8800/api/search_history/searched', {
-          headers: {
-            'x-user-id': userId,
-          },
-        });
-
-        setProducts(res.data);
-      } catch (err) {
-        console.error('Failed to fetch products:', err);
-        setError("Error loading data.");
-      }
-    };
-
-    fetchData();
+    fetchData("desc", parsedUser.user_ID); // Initial fetch with default sorting
   }, []);
 
   const filteredItems = getFilteredItems(query, products);
@@ -52,7 +53,7 @@ function Shpage() {
 
   const handleSearch = (e) => {
     e.preventDefault();
-    setCurrentPage(1); 
+    setCurrentPage(1);
   };
 
   const handlePageChange = (pageNumber) => {
@@ -94,7 +95,23 @@ function Shpage() {
 
           <div className="H-searchbody">
             <div className="H-filterbody">
-              <p>Filter section</p>
+              <label htmlFor="filterSelect">Sort by:</label>
+              <select
+                id="filterSelect"
+                onChange={(e) => {
+                  setQuery("");
+                  setCurrentPage(1);
+                  if (user) {
+                    fetchData(e.target.value, user.user_ID);
+                  }
+                }}
+                className="filter-dropdown"
+              >
+                <option value="desc">Newest First</option>
+                <option value="asc">Oldest First</option>
+                <option value="price">Current Price (High to Low)</option>
+                <option value="store">Store Name (Z-A)</option>
+              </select>
             </div>
 
             <div className="H-itemlog">
@@ -102,8 +119,10 @@ function Shpage() {
                 {currentItems.length > 0 ? (
                   currentItems.map(item => (
                     <li key={item.search_ID} className="H_list">
-                      <div><strong>{item.product_name}</strong></div>
-                      <div><strong>{item.price}</strong></div>
+                      <div className="H_itemtitleprice">
+                        <div><strong>{item.product_name}</strong></div>
+                        <div><strong>${item.price}</strong></div>
+                      </div>
                       <div>Searched by {item.user_name}</div>
                       <div>on {new Date(item.search_date).toLocaleDateString()}</div>
                     </li>
@@ -111,21 +130,21 @@ function Shpage() {
                 ) : (
                   <li>No search history found.</li>
                 )}
+                {totalPages > 1 && (
+                  <div className="pagination">
+                    {Array.from({ length: totalPages }, (_, index) => (
+                      <button
+                        key={index}
+                        className={`page-button ${currentPage === index + 1 ? 'active' : ''}`}
+                        onClick={() => handlePageChange(index + 1)}
+                      >
+                        {index + 1}
+                      </button>
+                    ))}
+                  </div>
+                )}
               </ul>
 
-              {totalPages > 1 && (
-                <div className="pagination">
-                  {Array.from({ length: totalPages }, (_, index) => (
-                    <button
-                      key={index}
-                      className={`page-button ${currentPage === index + 1 ? 'active' : ''}`}
-                      onClick={() => handlePageChange(index + 1)}
-                    >
-                      {index + 1}
-                    </button>
-                  ))}
-                </div>
-              )}
             </div>
           </div>
 
