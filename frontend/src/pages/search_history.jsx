@@ -68,7 +68,7 @@ function Shpage() {
           {localStorage.getItem("user") ? (
             <li><a href="/profile">PROFILE</a></li>
           ) : (
-            <li><a href="/signup">SIGN UP</a></li>
+            <li><a href="/login">LOGIN</a></li>
           )}
         </ul>
       </nav>
