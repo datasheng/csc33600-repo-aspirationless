@@ -4,8 +4,6 @@ import ItemBox from "./itembox";
 import Ad from "./ad";
 
 function Home() {
-    const [searchTerm, setSearchTerm] = useState("");
-    const [searchResults, setSearchResults] = useState([]);
     const [showResults, setShowResults] = useState(false);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
@@ -75,35 +73,6 @@ function Home() {
         fetchProducts();
     }, []);
 
-    // Handle product search
-    const handleSearch = async (e) => {
-        e.preventDefault();
-
-        if (!isLoggedIn()) {
-            redirectToLogin();
-            return;
-        }
-
-        setLoading(true);
-        setError("");
-
-        try {
-            const response = await fetch(`http://localhost:8800/api/products/search?q=${searchTerm}`);
-            const data = await response.json();
-
-            if (response.ok) {
-                setSearchResults(data);
-                setShowResults(true);
-            } else {
-                setError("Something went wrong. Please try again later.");
-            }
-        } catch (err) {
-            console.error(err);
-            setError("Failed to connect to the server. Please try again later.");
-        } finally {
-            setLoading(false);
-        }
-    };
 
     // Carousel helper functions
     const rotateLeft = (items, setIndex, index) => {
@@ -130,15 +99,6 @@ function Home() {
                     <p>Find the best prices for your favorite products!</p>
                 </a>
 
-                <form onSubmit={handleSearch} className="search-form">
-                    <input
-                        type="text"
-                        placeholder="Search for a product..."
-                        value={searchTerm}
-                        onChange={(e) => setSearchTerm(e.target.value)}
-                    />
-                    <button type="submit">Search</button>
-                </form>
 
                 <div 
                     className="advanced-search-button" 
@@ -150,7 +110,7 @@ function Home() {
                         }
                     }}
                 >
-                    <h5>Power Search</h5>
+                    <h5>Start Your Search!</h5>
                 </div>
 
                 <div className="profile-icon" onClick={() => {

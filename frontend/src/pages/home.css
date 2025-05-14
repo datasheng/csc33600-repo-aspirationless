@@ -26,22 +26,23 @@ body {
 
 .header-link h1 {
     margin: 0;
+    margin-left: 40px;
     font-size: 2.2rem;
-    color: #ffffff;
+    color: #3b82f6;
     transition: color 0.3s ease;
     text-decoration: underline;
 }
 
 .header-link p {
     margin: 0;
+    margin-left: 40px;
     font-size: 1rem;
-    color: #ffffff;
+    color: #3b82f6;
     transition: color 0.3s ease;
-    text-decoration: underline ;
 }
 
 .header-link:hover h1 {
-    color: #3b82f6; /* Blue */
+    color: #fafafa; /* Blue */
 }
 
 .header-link:hover p {
@@ -52,11 +53,12 @@ body {
     cursor: pointer;
     padding: 5px 5px;
     background-color: #3b82f6;;
-    color: #fff;
-    border-radius: 8px;
+    color: #ffffff;
+    border-radius: 13px;
     text-align: center;
+    text-transform: uppercase;
     transition: background-color 0.3s ease;
-    margin: 10px 0;
+    margin: 1px 0;
 }
 
 .advanced-search-button:hover {
@@ -213,8 +215,8 @@ body {
 }
 
 .item-box img {
-    width: 40px;
-    height: 40px;
+    width: 100%;
+    height: auto;
     object-fit: cover;
     border-radius: 5px;
     margin-bottom: 10px;
