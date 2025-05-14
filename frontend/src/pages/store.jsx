@@ -35,6 +35,48 @@ function StorePage() {
   const currentItems = filteredItems.slice(indexOfFirstItem, indexOfLastItem);
   const totalPages = Math.ceil(filteredItems.length / itemsPerPage);
 
+
+
+  ///
+  const [product_name, setProductName] = useState("");
+  const [brand, setBrand] = useState("");
+  const [model_number, setModelNumber] = useState("");
+  const [description, setDescription] = useState("");
+  const [image_url, setImageUrl] = useState("");
+  const [category_ID, setCategoryID] = useState("");
+  const [price, setPrice] = useState("");
+  const [store_ID, setStoreID] = useState("");
+  const [product_link, setProductLink] = useState("");
+  const [affiliate_link, setAffiliateLink] = useState("");
+  
+    const handleAddProduct = async (e) => {
+        e.preventDefault();
+
+        try {
+            const res = await axios.post("http://localhost:8800/api/store/add-product", {
+                product_name,
+                brand,
+                model_number,
+                description,
+                image_url,
+                category_ID: parseInt(category_ID),
+                price: parseFloat(price),
+                store_ID: parseInt(store_ID),
+                product_link,
+                affiliate_link,
+                });
+
+                alert("Product added!");
+                setItems(prev => [...prev, res.data]); // optionally refresh list
+            } catch (err) {
+                console.error("Failed to add product:", err);
+                setError("Could not add product.");
+        }
+    };
+
+
+
+    //// 
   const handleSearch = (e) => {
     e.preventDefault();
     setCurrentPage(1);
@@ -89,19 +131,20 @@ function StorePage() {
 
           <div className="store-searchbody">
             <div className="store-filterbody">
-              <div style={{ marginTop: "1rem" }}>
-                <form></form>
-                <form></form>
-                <form></form>
-                <form></form>
-                <form></form>
-                <button
-                  className="add-product-button"
-                  onClick={() => window.location.href = "/add-product"}
-                >
-                  + Add Product
-                </button>
-              </div>
+                <form onSubmit={handleAddProduct} className="product-form">
+                    <input type="text" placeholder="Product Name" value={product_name} onChange={(e) => setProductName(e.target.value)} />
+                    <input type="text" placeholder="Brand" value={brand} onChange={(e) => setBrand(e.target.value)} />
+                    <input type="text" placeholder="Model Number" value={model_number} onChange={(e) => setModelNumber(e.target.value)} />
+                    <input type="text" placeholder="Description" value={description} onChange={(e) => setDescription(e.target.value)} />
+                    <input type="text" placeholder="Image URL" value={image_url} onChange={(e) => setImageUrl(e.target.value)} />
+                    <input type="number" placeholder="Category ID" value={category_ID} onChange={(e) => setCategoryID(e.target.value)} />
+                    <input type="number" placeholder="Price" value={price} onChange={(e) => setPrice(e.target.value)} />
+                    <input type="number" placeholder="Store ID" value={store_ID} onChange={(e) => setStoreID(e.target.value)} />
+                    <input type="text" placeholder="Product Link" value={product_link} onChange={(e) => setProductLink(e.target.value)} />
+                    <input type="text" placeholder="Affiliate Link" value={affiliate_link} onChange={(e) => setAffiliateLink(e.target.value)} />
+
+                    <button type="submit" className="add-product-button">+ Add Product</button>
+                </form>
             </div>
 
             <ul className="store-itemlog">
@@ -119,13 +162,13 @@ function StorePage() {
                           ) : "N/A"}
                         </strong>
                       </p>
-                      <div className="sbutton-group">
+                      <div className="sbutton-group">{/*
                         <button
                           className="edit-button"
                           onClick={() => window.location.href = `/edit-product/${item.product_ID}`}
                         >
                           Edit
-                        </button>
+                        </button>*/}
                         <button
                           className="delete-button"
                           onClick={() => handleDelete(item.product_ID)}
