@@ -91,47 +91,50 @@ router.put('/update-product/:id', (req, res) => {
 });
 
 
-// DELETE product by ID (with cascade handled by DB or manually)
 router.delete('/delete-product/:product_ID', (req, res) => {
     const product_ID = parseInt(req.params.product_ID, 10);
+  
     if (!product_ID || isNaN(product_ID)) {
       return res.status(400).json({ error: 'Invalid or missing Product ID' });
     }
+  
     console.log('Attempting to delete product ID:', product_ID);
-    
-    db.query('DELETE FROM product_prices WHERE product_ID = ?;', [product_ID], (err) => {
+  
+    db.query('DELETE FROM product_prices WHERE product_ID = ?', [product_ID], (err) => {
       if (err) {
-        console.error('Error deleting product prices:', err);
-        return res.status(500).json({ error: 'Failed to delete product prices' });
+        console.error('Error deleting product_prices:', err);
+        return res.status(500).json({ error: 'Failed to delete product_prices' });
       }
-      db.query('DELETE FROM search_history WHERE product_ID = ?;', [product_ID], (err, result) => {
+  
+      db.query('DELETE FROM search_history WHERE product_ID = ?', [product_ID], (err) => {
         if (err) {
-          console.error('Error deleting product:', err);
-          return res.status(500).json({ error: 'Failed to delete from search_history' });
-        }
-        return res.status(200).json({ message: 'Product deleted successfully' });
-      });
-      db.query('DELETE FROM click_log WHERE product_ID = ?;', [product_ID], (err, result) => {
-        if (err) {
-          console.error('Error deleting product:', err);
-          return res.status(500).json({ error: 'Failed to delete from search_history' });
-        }
-        return res.status(200).json({ message: 'Product deleted successfully' });
-      });
-      db.query('DELETE FROM product WHERE product_ID = ?;', [product_ID], (err, result) => {
-        if (err) {
-          console.error('Error deleting product:', err);
-          return res.status(500).json({ error: 'Failed to delete product' });
+          console.error('Error deleting from search_history:', err);
+          return res.status(500).json({ error: 'Failed to delete search_history' });
         }
   
-        if (result.affectedRows === 0) {
-          return res.status(404).json({ message: 'Product not found' });
-        }
+        db.query('DELETE FROM click_log WHERE product_ID = ?', [product_ID], (err) => {
+          if (err) {
+            console.error('Error deleting from click_log:', err);
+            return res.status(500).json({ error: 'Failed to delete click_log' });
+          }
   
-        return res.status(200).json({ message: 'Product deleted successfully' });
+          db.query('DELETE FROM product WHERE product_ID = ?', [product_ID], (err, result) => {
+            if (err) {
+              console.error('Error deleting product:', err);
+              return res.status(500).json({ error: 'Failed to delete product' });
+            }
+  
+            if (result.affectedRows === 0) {
+              return res.status(404).json({ message: 'Product not found' });
+            }
+  
+            return res.status(200).json({ message: 'Product deleted successfully' });
+          });
+        });
       });
     });
   });
+  
   
 
 /**
