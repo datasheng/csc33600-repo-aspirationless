@@ -30,7 +30,7 @@ function Shpage() {
 
         const res = await axios.get('http://localhost:8800/api/search_history/searched', {
           headers: {
-            'x-user-id': 1,
+            'x-user-id': userId,
           },
         });
 
@@ -63,11 +63,13 @@ function Shpage() {
     <div>
       <nav className="main-navbar">
         <ul>
-          <li><a>HOME</a></li>
-          <li><a>PRODUCTS</a></li>
-          <li><a>HISTORY</a></li>
-          <li><a>b</a></li>
-          <li><a>PROFILE</a></li>
+          <li><a href="/">PRICE SCOUT</a></li>
+          <li><a href="/search">PRODUCTS</a></li>
+          {localStorage.getItem("user") ? (
+            <li><a href="/profile">PROFILE</a></li>
+          ) : (
+            <li><a href="/signup">SIGN UP</a></li>
+          )}
         </ul>
       </nav>
 
