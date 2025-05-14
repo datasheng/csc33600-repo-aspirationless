@@ -48,7 +48,7 @@ function StorePage() {
     if (!window.confirm("Are you sure you want to delete this product?")) return;
   
     try {
-      await axios.delete(`http://localhost:8800/api/product/delete-product/${productId}`);
+      await axios.delete(`http://localhost:8800/api/store/delete-product/${productId}`);
   
       setItems(prevItems => prevItems.filter(item => item.product_ID !== productId));
     } catch (err) {
@@ -90,6 +90,11 @@ function StorePage() {
           <div className="store-searchbody">
             <div className="store-filterbody">
               <div style={{ marginTop: "1rem" }}>
+                <form></form>
+                <form></form>
+                <form></form>
+                <form></form>
+                <form></form>
                 <button
                   className="add-product-button"
                   onClick={() => window.location.href = "/add-product"}
