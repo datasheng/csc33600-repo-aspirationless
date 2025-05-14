@@ -1,5 +1,3 @@
-// ✅ Updated productspage.jsx with improved logo styling
-
 import React, { useEffect, useState } from 'react';
 import { useParams, useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';

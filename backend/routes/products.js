@@ -34,43 +34,6 @@ router.get('/search', (req, res) => {
 // GET /api/products/:id
 // Get offers and basic product info for a single product
 // ----------------------------------------------
-router.get('/:id', (req, res) => {
-  const productId = req.params.id;
-
-  const sql = `
-    SELECT 
-      s.store_name, 
-      o.price, 
-      o.product_url,
-      p.product_name,
-      p.image_url
-    FROM product_offer o
-    JOIN store s ON o.store_ID = s.store_ID
-    JOIN product p ON o.product_ID = p.product_ID
-    WHERE o.product_ID = ?
-  `;
-
-  db.query(sql, [productId], (err, results) => {
-    if (err) return res.status(500).json({ error: 'Database error during product lookup' });
-
-    if (results.length === 0) {
-      return res.status(404).json({ error: 'Product not found' });
-    }
-
-    const { product_name, image_url } = results[0];
-    const offers = results.map(r => ({
-      store_name: r.store_name,
-      price: r.price,
-      product_url: r.product_url
-    }));
-
-    res.json({
-      name: product_name,
-      image: image_url,
-      offers
-    });
-  });
-});
 
 // Hot Products Route
 router.get("/hot-products", (req, res) => {

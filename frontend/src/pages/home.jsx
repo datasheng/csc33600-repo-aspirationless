@@ -169,7 +169,13 @@ function Home() {
                             <button className="arrow left" onClick={() => rotateLeft(hotProducts, setHotIndex, hotIndex)}>◀</button>
                             <div className="carousel-items">
                                 {getVisibleItems(hotProducts, hotIndex).map((item) => (
-                                    <ItemBox key={item.product_ID} image={item.image_url} title={item.product_name} price={`$${parseFloat(item.price).toFixed(2)}`} />
+                                    <ItemBox 
+                                        key={item.product_ID} 
+                                        product_ID={item.product_ID}
+                                        image={item.image_url} 
+                                        title={item.product_name} 
+                                        price={item.price} 
+                                    />
                                 ))}
                             </div>
                             <button className="arrow right" onClick={() => rotateRight(hotProducts, setHotIndex, hotIndex)}>▶</button>
@@ -181,8 +187,14 @@ function Home() {
                         <div className="carousel">
                             <button className="arrow left" onClick={() => rotateLeft(topDeals, setTopIndex, topIndex)}>◀</button>
                             <div className="carousel-items">
-                                {getVisibleItems(topDeals, topIndex).map((item) => (
-                                    <ItemBox key={item.product_ID} image={item.image_url} title={item.product_name} price={`$${parseFloat(item.price).toFixed(2)}`} />
+                                {getVisibleItems(topDeals,topIndex).map((item) => (
+                                    <ItemBox 
+                                        key={item.product_ID} 
+                                        product_ID={item.product_ID}
+                                        image={item.image_url} 
+                                        title={item.product_name} 
+                                        price={item.price} 
+                                    />
                                 ))}
                             </div>
                             <button className="arrow right" onClick={() => rotateRight(topDeals, setTopIndex, topIndex)}>▶</button>

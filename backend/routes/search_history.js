@@ -4,7 +4,7 @@ import db from '../db.js';
 const router = express.Router();
 
 // GET /api/search_history/searched
-router.get('/searched', (req, res) => {
+router.get('/searched/user', (req, res) => {
   const userId = req.headers['x-user-id'];
 
   if (!userId) {
