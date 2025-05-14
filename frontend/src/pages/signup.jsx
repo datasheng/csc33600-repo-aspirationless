@@ -29,7 +29,7 @@ function Signup() {
 
             // After 2 seconds, redirect to login page
             setTimeout(() => {
-                window.location.href = "/";
+                window.location.href = "/login";
             }, 2000);
 
         } catch (err) {

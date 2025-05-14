@@ -12,17 +12,22 @@ function Home() {
     const [hotIndex, setHotIndex] = useState(0);
     const [topIndex, setTopIndex] = useState(0);
     const [ads, setAds] = useState([]);
+    const [hotProducts, setHotProducts] = useState([]);
+    const [topDeals, setTopDeals] = useState([]);
 
+    // Check if the user is logged in
     const isLoggedIn = () => {
         const token = localStorage.getItem("token");
         return token && token !== "undefined" && token !== "null" && token.trim() !== "";
     };
 
+    // Redirect to login if not logged in
     const redirectToLogin = () => {
         alert("Please log in to continue.");
         window.location.href = "/login";
     };
 
+    // Fetch ads
     useEffect(() => {
         const fetchAds = async () => {
             try {
@@ -40,6 +45,37 @@ function Home() {
         fetchAds();
     }, []);
 
+    // Fetch products (Hot and Top Deals)
+    useEffect(() => {
+        const fetchProducts = async () => {
+            try {
+                const [hotResponse, topResponse] = await Promise.all([
+                    fetch("http://localhost:8800/api/products/hot-products"),
+                    fetch("http://localhost:8800/api/products/top-deals")
+                ]);
+
+                if (!hotResponse.ok || !topResponse.ok) {
+                    console.error("Failed to fetch products from the server");
+                    return;
+                }
+
+                const hotData = await hotResponse.json();
+                const topData = await topResponse.json();
+
+                console.log("Hot Products:", hotData);
+                console.log("Top Deals:", topData);
+
+                setHotProducts(hotData);
+                setTopDeals(topData);
+            } catch (error) {
+                console.error("Failed to fetch products:", error);
+            }
+        };
+
+        fetchProducts();
+    }, []);
+
+    // Handle product search
     const handleSearch = async (e) => {
         e.preventDefault();
 
@@ -69,10 +105,7 @@ function Home() {
         }
     };
 
-    const handleRemoveAd = (adId) => {
-        setAds((prevAds) => prevAds.filter((ad) => ad.ad_ID !== adId));
-    };
-
+    // Carousel helper functions
     const rotateLeft = (items, setIndex, index) => {
         setIndex((index - 1 + items.length) % items.length);
     };
@@ -83,27 +116,11 @@ function Home() {
 
     const getVisibleItems = (items, index) => {
         const visibleItems = [];
-        for (let i = 0; i < 3; i++) {
+        for (let i = 0; i < Math.min(3, items.length); i++) {
             visibleItems.push(items[(index + i) % items.length]);
         }
         return visibleItems;
     };
-  // Sample Hot Products and Top Deals
-  const hotProducts = [
-    { id: 1, image: "https://newworld.co.za/cdn/shop/products/1_1b05e890-af71-47d9-b76b-0e5674a44d60.webp?v=1736979562", title: "Hot Product 1", price: 19.99 },
-    { id: 2, image: "https://newworld.co.za/cdn/shop/products/1_1b05e890-af71-47d9-b76b-0e5674a44d60.webp?v=1736979562", title: "Hot Product 2", price: 29.99 },
-    { id: 3, image: "https://assets.adidas.com/images/w_600,f_auto,q_auto/140bc1b42e824d8bb715ebf456a4b65e_9366/Ultraboost_1.0_Shoes_Black_HQ4204_HM1.jpg", title: "Hot Product 3", price: 39.99 },
-    { id: 4, image: "https://newworld.co.za/cdn/shop/products/1_1b05e890-af71-47d9-b76b-0e5674a44d60.webp?v=1736979562", title: "Hot Product 4", price: 49.99 },
-    { id: 5, image: "https://assets.adidas.com/images/w_600,f_auto,q_auto/140bc1b42e824d8bb715ebf456a4b65e_9366/Ultraboost_1.0_Shoes_Black_HQ4204_HM1.jpg", title: "Hot Product 5", price: 59.99 },
-  ];
-
-  const topDeals = [
-    { id: 6, image: "https://newworld.co.za/cdn/shop/products/1_1b05e890-af71-47d9-b76b-0e5674a44d60.webp?v=1736979562", title: "Top Deal 1", price: 39.99 },
-    { id: 7, image: "https://newworld.co.za/cdn/shop/products/1_1b05e890-af71-47d9-b76b-0e5674a44d60.webp?v=1736979562", title: "Top Deal 2", price: 49.99 },
-    { id: 8, image: "https://assets.adidas.com/images/w_600,f_auto,q_auto/140bc1b42e824d8bb715ebf456a4b65e_9366/Ultraboost_1.0_Shoes_Black_HQ4204_HM1.jpg", title: "Top Deal 3", price: 59.99 },
-    { id: 9, image: "https://newworld.co.za/cdn/shop/products/1_1b05e890-af71-47d9-b76b-0e5674a44d60.webp?v=1736979562", title: "Top Deal 4", price: 69.99 },
-    { id: 10, image: "https://newworld.co.za/cdn/shop/products/1_1b05e890-af71-47d9-b76b-0e5674a44d60.webp?v=1736979562", title: "Top Deal 5", price: 79.99 },
-  ];
 
     return (
         <div className="App">
@@ -114,9 +131,27 @@ function Home() {
                 </a>
 
                 <form onSubmit={handleSearch} className="search-form">
-                    <input type="text" placeholder="Search for a product..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} />
+                    <input
+                        type="text"
+                        placeholder="Search for a product..."
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                    />
                     <button type="submit">Search</button>
                 </form>
+
+                <div 
+                    className="advanced-search-button" 
+                    onClick={() => {
+                        if (!isLoggedIn()) {
+                            redirectToLogin();
+                        } else {
+                            window.location.href = "/search";
+                        }
+                    }}
+                >
+                    <h5>Power Search</h5>
+                </div>
 
                 <div className="profile-icon" onClick={() => {
                     if (!isLoggedIn()) {
@@ -131,79 +166,70 @@ function Home() {
             </header>
 
             <div className="ads-section">
-                {ads.map((ad, index) => {
-                    const isLeft = index % 2 === 0;
-                    const positionIndex = Math.floor(index / 2); // Stack ads on each side
-                    const topOffset = 100 + (positionIndex * 320); // Adjust spacing
-
-                    return (
-                        <div 
-                            key={ad.ad_ID} 
-                            className={`floating-ad ${isLeft ? "left" : "right"}`} 
-                            style={{ top: `${topOffset}px` }}
+                {ads.map((ad, index) => (
+                    <div 
+                        key={ad.ad_ID} 
+                        className={`floating-ad ${index % 2 === 0 ? "left" : "right"}`} 
+                        style={{ top: `${100 + (index / 2) * 320}px` }}
+                    >
+                        <button 
+                            className="close-button" 
+                            onClick={() => setAds((prevAds) => prevAds.filter(a => a.ad_ID !== ad.ad_ID))}
                         >
-                            <button 
-                                className="close-button" 
-                                onClick={() => setAds((prevAds) => prevAds.filter(a => a.ad_ID !== ad.ad_ID))}
-                            >
-                                ✖
-                            </button>
-                            <img src={ad.image_url || "https://via.placeholder.com/180"} alt="Ad" />
-                        </div>
-                    );
-                })}
+                            ✖
+                        </button>
+                        <a 
+                            href={ad.target_link || "#"} 
+                            target="_blank" 
+                            rel="noopener noreferrer" 
+                            className="ad-link"
+                        >
+                            <img 
+                                src={ad.image_url || "https://via.placeholder.com/180"} 
+                                alt={ad.description || "Ad"} 
+                                className="ad-image"
+                            />
+                            <h4 className="ad-description">
+                                {ad.description || "Check this out!"}
+                            </h4>
+                        </a>
+
+                    </div>
+                ))}
             </div>
 
             {loading && <p>Loading...</p>}
             {error && <p className="error">{error}</p>}
 
-           {showResults ? (
-<section className="item-section">
-    <h2>Search Results</h2>
-    {searchResults.length > 0 ? (
-        <div className="item-box-container">
-            {searchResults.map((item) => (
-                <ItemBox
-                    key={item.product_ID}
-                    image={item.image_url || "https://via.placeholder.com/300"}
-                    title={item.product_name}
-                    price={item.brand || "No brand available"}
-                />
-            ))}
-        </div>
-    ) : (
-        <p>No results found.</p>
-    )}
-</section>
-      ) : (
-        <>
-          <section className="carousel-section">
-            <h2>🔥 Trending Now</h2>
-            <div className="carousel">
-              <button className="arrow left" onClick={() => rotateLeft(hotProducts, setHotIndex, hotIndex)}>◀</button>
-              <div className="carousel-items">
-                {getVisibleItems(hotProducts, hotIndex).map((item) => (
-                  <ItemBox key={item.id} image={item.image} title={item.title} price={item.price} />
-                ))}
-              </div>
-              <button className="arrow right" onClick={() => rotateRight(hotProducts, setHotIndex, hotIndex)}>▶</button>
-            </div>
-          </section>
+            {!showResults && (
+                <>
+                    <section className="carousel-section">
+                        <h2>🔥 Trending Now</h2>
+                        <div className="carousel">
+                            <button className="arrow left" onClick={() => rotateLeft(hotProducts, setHotIndex, hotIndex)}>◀</button>
+                            <div className="carousel-items">
+                                {getVisibleItems(hotProducts, hotIndex).map((item) => (
+                                    <ItemBox key={item.product_ID} image={item.image_url} title={item.product_name} price={`$${parseFloat(item.price).toFixed(2)}`} />
+                                ))}
+                            </div>
+                            <button className="arrow right" onClick={() => rotateRight(hotProducts, setHotIndex, hotIndex)}>▶</button>
+                        </div>
+                    </section>
 
-          <section className="carousel-section">
-            <h2>🏆 Today’s Top Picks</h2>
-            <div className="carousel">
-              <button className="arrow left" onClick={() => rotateLeft(topDeals, setTopIndex, topIndex)}>◀</button>
-              <div className="carousel-items">
-                {getVisibleItems(topDeals, topIndex).map((item) => (
-                  <ItemBox key={item.id} image={item.image} title={item.title} price={item.price} />
-                ))}
-              </div>
-              <button className="arrow right" onClick={() => rotateRight(topDeals, setTopIndex, topIndex)}>▶</button>
-            </div>
-          </section>
-        </>
-      )}
+                    <section className="carousel-section">
+                        <h2>🏆 Today’s Top Picks</h2>
+                        <div className="carousel">
+                            <button className="arrow left" onClick={() => rotateLeft(topDeals, setTopIndex, topIndex)}>◀</button>
+                            <div className="carousel-items">
+                                {getVisibleItems(topDeals, topIndex).map((item) => (
+                                    <ItemBox key={item.product_ID} image={item.image_url} title={item.product_name} price={`$${parseFloat(item.price).toFixed(2)}`} />
+                                ))}
+                            </div>
+                            <button className="arrow right" onClick={() => rotateRight(topDeals, setTopIndex, topIndex)}>▶</button>
+                        </div>
+                    </section>
+                </>
+            )}
 
             <footer className="footer">
                 <p>&copy; 2025 PriceScout. All rights reserved.</p>

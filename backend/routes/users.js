@@ -70,7 +70,7 @@ router.post("/login", (req, res) => {
                 subscriptionStatus: user.subscription_status  // Include subscription status
             },
             process.env.JWT_SECRET,
-            { expiresIn: "2h" }
+            { expiresIn: "1h" }
         );
 
         // Send the full user data, including subscription status
@@ -86,5 +86,58 @@ router.post("/login", (req, res) => {
         });
     });
 });
+
+// Get User Details
+router.get("/:userId", async (req, res) => {
+    const { userId } = req.params;
+    try {
+        const q = "SELECT * FROM user WHERE user_ID = ?";
+        db.query(q, [userId], (err, data) => {
+            if (err) return res.status(500).json("Database error.");
+            if (data.length === 0) return res.status(404).json("User not found!");
+            res.json(data[0]);
+        });
+    } catch (error) {
+        console.error("Failed to fetch user:", error.message);
+        res.status(500).json("Failed to fetch user");
+    }
+});
+
+// Update User Details
+router.put("/updated/:userId", async (req, res) => {
+    const { userId } = req.params;
+    const { name, email, password, subscription } = req.body;
+
+     try {
+        // Hash the password if it was updated
+        let hashedPassword = password;
+        if (password) {
+            const salt = await bcrypt.genSalt(10);
+            hashedPassword = await bcrypt.hash(password, salt);
+        }
+
+        const q = `
+            UPDATE user 
+            SET user_name = ?, user_email = ?, user_password = ?, subscription_status = ? 
+            WHERE user_ID = ?
+        `;
+
+        db.query(q, [name, email, hashedPassword, subscription, userId], (err, result) => {
+            if (err) {
+                console.error("Failed to update user:", err.message);
+                return res.status(500).json("Failed to update user.");
+            }
+
+            if (result.affectedRows === 0) return res.status(404).json("User not found!");
+
+            res.json("User updated successfully!");
+        });
+    } catch (error) {
+        console.error("Failed to hash password:", error.message);
+        res.status(500).json("Failed to update user.");
+    }
+});
+
+
 
 export default router;

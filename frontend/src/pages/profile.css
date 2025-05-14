@@ -1,52 +1,145 @@
-/* Profile Page Styles */
+/* Container Styles */
 .profile-container {
     display: flex;
-    flex-direction: column;
+    justify-content: center;
     align-items: center;
-    padding: 2rem;
-    background-color: #f7f7f7;
     min-height: 100vh;
+    background-color: #aaacb3; /* Dark background */
+    padding: 20px;
 }
 
+/* Card Styles */
 .profile-card {
-    background-color: #ffffff;
-    padding: 2rem;
-    border-radius: 12px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    background-color: #1f2937; /* Dark card background */
+    border-radius: 20px;
+    border: #f4f4f5 2px solid;
+    padding: 40px 30px;
     text-align: center;
-    width: 300px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+    width: 360px;
+    color: #ffffff;
 }
 
+/* Back Button Styles */
+.back-button {
+    background-color: #271ddb;
+    color: #ffffff;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 15px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    z-index: 100;
+}
+
+.back-button:hover {
+    background-color: #6366f1;
+    color: #ffffff;
+}
+
+
+/* Profile Image */
 .profile-image {
     width: 120px;
     height: 120px;
     border-radius: 50%;
-    margin-bottom: 1rem;
+    margin-bottom: 20px;
+    margin-top: 20px;
+    border: 3px solid #4f46e5;
 }
 
+/* Text Styles */
 .profile-card h2 {
-    margin-bottom: 0.5rem;
-    font-size: 1.8rem;
-    color: #333;
+    margin-bottom: 10px;
+    font-size: 1.8em;
+    color: #f4f4f5;
+    border-bottom: 2px solid #4f46e5;
+    padding-bottom: 10px;
 }
 
 .profile-card p {
-    color: #666;
-    font-size: 1rem;
-    margin-bottom: 1.5rem;
+    margin: 10px 0;
+    font-size: 1.1em;
+    color: #cbd5e1;
+}
+
+/* Input and Select Styles */
+.profile-card input,
+.profile-card select {
+    width: 90%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border-radius: 10px;
+    border: 1px solid #4f46e5;
+    background-color: #1f2937;
+    color: #ffffff;
+    font-size: 1em;
+    transition: all 0.3s ease;
+}
+
+.profile-card input:focus,
+.profile-card select:focus {
+    border-color: #818cf8;
+    outline: none;
+}
+
+/* Button Styles */
+.profile-card button {
+    width: 100%;
+    padding: 12px;
+    margin: 10px 0;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 1em;
+    transition: all 0.3s ease;
+    color: #ffffff;
+}
+
+/* Button Variants */
+.edit-button {
+    background-color: #4f46e5;
 }
 
 .logout-button {
-    background-color: #f44336;
-    color: #fff;
-    border: none;
-    padding: 0.75rem 1.5rem;
-    border-radius: 8px;
-    cursor: pointer;
-    font-size: 1rem;
-    transition: background-color 0.3s;
+    background-color: #ef4444;
+}
+
+.my-searches-button {
+    background-color: #10b981;
+}
+
+/* Hover Effects */
+.edit-button:hover {
+    background-color: #6366f1;
 }
 
 .logout-button:hover {
-    background-color: #d32f2f;
+    background-color: #dc2626;
+}
+
+.my-searches-button:hover {
+    background-color: #059669;
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 400px) {
+    .profile-card {
+        width: 90%;
+        padding: 30px 20px;
+    }
+
+    .profile-card h2 {
+        font-size: 1.6em;
+    }
+
+    .profile-card p {
+        font-size: 1em;
+    }
+
+    .profile-card button {
+        font-size: 0.9em;
+        padding: 10px;
+    }
 }

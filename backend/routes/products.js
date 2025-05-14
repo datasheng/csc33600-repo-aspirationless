@@ -40,6 +40,58 @@ router.get("/random", (req, res) => {
     });
 });
 
+// Hot Products Route
+router.get("/hot-products", (req, res) => {
+    const query = `
+        SELECT 
+            p.product_ID, 
+            p.product_name, 
+            p.image_url, 
+            MIN(pp.price) AS price
+        FROM product p
+        JOIN product_prices pp ON p.product_ID = pp.product_ID
+        GROUP BY p.product_ID
+        ORDER BY RAND()
+        LIMIT 5;
+    `;
+
+    db.query(query, (error, rows) => {
+        if (error) {
+            console.error("Failed to fetch hot products:", error.message, error.stack);
+            return res.status(500).json({ error: "Failed to fetch hot products" });
+        }
+
+        console.log("Hot Products:", rows);
+        res.json(rows);
+    });
+});
+
+// Top Deals Route
+router.get("/top-deals", (req, res) => {
+    const query = `
+        SELECT 
+            p.product_ID, 
+            p.product_name, 
+            p.image_url, 
+            MIN(pp.price) AS price
+        FROM product p
+        JOIN product_prices pp ON p.product_ID = pp.product_ID
+        GROUP BY p.product_ID
+        ORDER BY price ASC
+        LIMIT 5;
+    `;
+
+    db.query(query, (error, rows) => {
+        if (error) {
+            console.error("Failed to fetch top deals:", error.message, error.stack);
+            return res.status(500).json({ error: "Failed to fetch top deals" });
+        }
+
+        console.log("Top Deals:", rows);
+        res.json(rows);
+    });
+});
+
 
 
 export default router;

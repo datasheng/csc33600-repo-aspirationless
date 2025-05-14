@@ -1,14 +1,16 @@
 import React from "react";
 import "./home.css";
 
-function ItemBox({ image, title}) {
-  return (
-    <div className="item-box">
-      <img src={image || "placeholder.jpg"} alt={title} />
-      <h3>{title}</h3>
-      <button>View Deals</button>
-    </div>
-  );
+function ItemBox({ image, title, price }) {
+    return (
+        <div className="item-box">
+            <img src={image} alt={title} />
+            <div className="item-details">
+                <h3>{title}</h3>
+                <p>{price}</p>
+            </div>
+        </div>
+    );
 }
 
 export default ItemBox;
