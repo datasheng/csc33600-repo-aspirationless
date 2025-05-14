@@ -63,8 +63,8 @@ function Shpage() {
     <div>
       <nav className="main-navbar">
         <ul>
-          <li><a href="/home">PRICE SCOUT</a></li>
-          <li><a href="/searchpage">PRODUCTS</a></li>
+          <li><a href="/">PRICE SCOUT</a></li>
+          <li><a href="/search">PRODUCTS</a></li>
           {localStorage.getItem("user") ? (
             <li><a href="/profile">PROFILE</a></li>
           ) : (
