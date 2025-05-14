@@ -19,11 +19,16 @@
     padding: 1.5rem;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
 }
 
 .search-input-group {
     display: flex;
-    margin-bottom: 1rem;
+    flex-direction: row;
+    width: 100%;
+    gap: 0.5rem;
 }
 
 .search-input {
@@ -56,20 +61,22 @@
 
 .filter-section {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    grid-template-columns: 1fr 1fr 1fr;
     gap: 1.5rem;
-    margin-top: 1.5rem;
 }
 
 .filter-group {
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
+    align-items: center;
 }
 
-.filter-group label {
+.filter-group > label {
     font-weight: 500;
     color: #555;
+    text-align: center;
+    margin-bottom: 0.25rem;
 }
 
 .filter-select {
@@ -77,6 +84,16 @@
     border: 1px solid #ddd;
     border-radius: 4px;
     font-size: 0.9rem;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.price-range-label {
+    font-weight: 500;
+    color: #555;
+    width: 100%;
+    text-align: center;
+    margin-bottom: 0.25rem;
 }
 
 .price-range {
@@ -84,12 +101,14 @@
     flex-direction: column;
     align-items: center;
     gap: 0.5rem;
+    width: 100%;
 }
 
 .price-range-inputs {
     display: flex;
     gap: 0.5rem;
     width: 100%;
+    align-items: center;
 }
 
 .price-input {
@@ -99,16 +118,13 @@
     border: 1px solid #ddd;
     border-radius: 4px;
     text-align: center;
-}
-
-.price-range-label {
-    width: 100%;
-    text-align: center;
+    box-sizing: border-box;
 }
 
 .sort-container {
     display: flex;
     gap: 1rem;
+    width: 100%;
 }
 
 .sort-group {
@@ -228,12 +244,12 @@
     .filter-section {
         grid-template-columns: 1fr;
     }
-    
+
     .sort-container {
         flex-direction: column;
         gap: 0.5rem;
     }
-    
+
     .product-grid {
         grid-template-columns: 1fr;
     }
