@@ -6,6 +6,7 @@ import Profile from './pages/profile';
 import SearchPage from './pages/searchpage';
 import Search_History from './pages/search_history';
 import ProductsPage from './pages/productspage'; 
+import Store_Admin from './pages/store'; 
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
         <Route path="/search" element={<SearchPage />} />
         <Route path="/search_history" element={<Search_History />} />
         <Route path="/product/:productId" element={<ProductsPage />} /> {}
+        <Route path="/store_admin" element={<Store_Admin />}/> 
       </Routes>
     </Router>
   );
