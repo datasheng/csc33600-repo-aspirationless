@@ -2,7 +2,6 @@ import "./search-history.css";
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 
-// Filter logic
 const getFilteredItems = (query, items) => {
   if (!query) return items;
   return items.filter((e) =>
@@ -14,28 +13,50 @@ function Shpage() {
   const [products, setProducts] = useState([]);
   const [query, setQuery] = useState("");
   const [error, setError] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 5;
 
-  // Fetch products on load
   useEffect(() => {
-    const fetchData = async (userof) => {
+    const fetchData = async () => {
       try {
-        const res = await axios.get('http://localhost:8800/api/search_history/searched', 
-            { headers: { 'x-username': 'Alice Johnson' }}); // PASS USERNAME DATA        
-            setProducts(res.data);
+        const storedUser = localStorage.getItem("user");
+        if (!storedUser) {
+          setError("User not logged in.");
+          return;
+        }
+
+        const user = JSON.parse(storedUser);
+        const userId = user.user_ID;
+
+        const res = await axios.get('http://localhost:8800/api/search_history/searched', {
+          headers: {
+            'x-user-id': 1,
+          },
+        });
+
+        setProducts(res.data);
       } catch (err) {
         console.error('Failed to fetch products:', err);
+        setError("Error loading data.");
       }
     };
+
     fetchData();
   }, []);
 
   const filteredItems = getFilteredItems(query, products);
 
-  // Optional search handler (not needed for filter-only search)
-  const handleSearch = async (e) => {
+  const totalPages = Math.ceil(filteredItems.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const currentItems = filteredItems.slice(startIndex, startIndex + itemsPerPage);
+
+  const handleSearch = (e) => {
     e.preventDefault();
-    // Optionally handle backend filtering/search here
-    // Currently unused
+    setCurrentPage(1); 
+  };
+
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
   };
 
   return (
@@ -71,33 +92,38 @@ function Shpage() {
 
           <div className="H-searchbody">
             <div className="H-filterbody">
-              {/* Future filters can go here */}
               <p>Filter section</p>
             </div>
 
             <div className="H-itemlog">
               <ul className="H-itemlog">
-                {filteredItems.length > 0 ? (
-                  filteredItems.map(item => (
+                {currentItems.length > 0 ? (
+                  currentItems.map(item => (
                     <li key={item.search_ID} className="H_list">
-                        <div>
-                            <strong>{item.product_name}</strong> 
-                        </div>
-                        <div>
-                            <strong>{item.price}</strong> 
-                        </div>
-                        <div>
-                            Searched by {item.user_name} 
-                        </div> 
-                        <div>
-                            on {new Date(item.search_date).toLocaleDateString()}
-                        </div>
+                      <div><strong>{item.product_name}</strong></div>
+                      <div><strong>{item.price}</strong></div>
+                      <div>Searched by {item.user_name}</div>
+                      <div>on {new Date(item.search_date).toLocaleDateString()}</div>
                     </li>
                   ))
                 ) : (
                   <li>No search history found.</li>
                 )}
               </ul>
+
+              {totalPages > 1 && (
+                <div className="pagination">
+                  {Array.from({ length: totalPages }, (_, index) => (
+                    <button
+                      key={index}
+                      className={`page-button ${currentPage === index + 1 ? 'active' : ''}`}
+                      onClick={() => handlePageChange(index + 1)}
+                    >
+                      {index + 1}
+                    </button>
+                  ))}
+                </div>
+              )}
             </div>
           </div>
 
