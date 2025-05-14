@@ -5,6 +5,7 @@ import userRoutes from './routes/users.js';
 import productRoutes from './routes/products.js'; // Import the product routes
 import searchRoutes from './routes/search.js';
 import searchHistoryRoutes from './routes/search_history.js';
+import storeadminRoutes from './routes/store.js';
 
 
 dotenv.config();
@@ -18,6 +19,7 @@ app.use('/api/users', userRoutes);
 app.use('/api/products', productRoutes);  // Add this line
 app.use('/api/search', searchRoutes);
 app.use('/api/search_history', searchHistoryRoutes);
+app.use('/api/store', storeadminRoutes);
 
 
 
